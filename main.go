@@ -18,7 +18,6 @@ import (
 	_userRepository "project3/repository/user"
 	_userUseCase "project3/usecase/user"
 
-	_routes "project3/delivery/routes"
 	_utils "project3/utils"
 )
 
@@ -26,14 +25,14 @@ func main() {
 	config := configs.GetConfig()
 	db := _utils.InitDB(config)
 
+	authRepo := _authRepository.NewAuthRepository(db)
+	authUseCase := _authUseCase.NewAuthUseCase(authRepo)
+	authHandler := _authHandler.NewAuthHandler(authUseCase)
+
 	userRepo := _userRepository.NewUserRepository(db)
 	userUseCase := _userUseCase.NewUserUseCase(userRepo)
 	userHandler := _userHandler.NewUserHandler(userUseCase)
 
-	authRepo := _authRepository.NewAuthRepository(db)
-	authUseCase := _authUseCase.NewAuthUseCase(authRepo)
-	authHandler := _authHandler.NewAuthHandler(authUseCase)
-	
 	e := echo.New()
 	e.Use(middleware.CORS())
 	e.Pre(middleware.RemoveTrailingSlash())
@@ -42,7 +41,7 @@ func main() {
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
 	}))
 	e.Use(_middleware.CustomLogger())
-	
+
 	_routes.RegisterUserPath(e, userHandler)
 	_routes.RegisterAuthPath(e, authHandler)
 
