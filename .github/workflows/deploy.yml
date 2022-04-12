@@ -22,4 +22,4 @@ jobs:
             docker rm groupcontainer
             docker rmi $(docker images 'groupimage' -q) --force
             docker build -t groupimage:latest .
-            docker run -d -p 8080:8080 -e APP_PORT="8080" -e DB_PORT="3306" -e DB_DRIVER="mysql" -e DB_NAME="group3" -e DB_ADDRESS="${{ secrets.DBHOST }}" -e DB_USERNAME="admin" -e DB_PASSWORD="${{ secrets.PASSWORD }}" --name groupcontainer groupimage:latest
+            docker run -d -p 8080:8080 -e APP_PORT="8080" -e DB_PORT="3306" -e DB_DRIVER="mysql" -e DB_NAME="group3" -e DB_ADDRESS="${{ secrets.DBHOST }}" -e DB_USERNAME="admin" -e DB_PASSWORD="qwerty123" --name groupcontainer groupimage:latest
