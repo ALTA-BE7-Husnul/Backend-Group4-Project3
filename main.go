@@ -8,7 +8,6 @@ import (
 
 	_authHandler "project3/delivery/handler/auth"
 	_middleware "project3/delivery/middlewares"
-	_routes "project3/delivery/routes"
 	_authRepository "project3/repository/auth"
 	_authUseCase "project3/usecase/auth"
 
@@ -48,3 +47,4 @@ func main() {
 
 	log.Fatal(e.Start(fmt.Sprintf(":%v", config.Port)))
 }
+
