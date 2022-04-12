@@ -5,6 +5,7 @@ import (
 	"log"
 	"project3/configs"
 	_authHandler "project3/delivery/handler/auth"
+	_middleware "project3/delivery/middlewares"
 	_routes "project3/delivery/routes"
 	_authRepository "project3/repository/auth"
 	_authUseCase "project3/usecase/auth"
@@ -25,6 +26,7 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.CORS())
 	e.Pre(middleware.RemoveTrailingSlash())
+	e.Use(_middleware.CustomLogger())
 
 	_routes.RegisterAuthPath(e, authHandler)
 
