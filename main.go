@@ -15,6 +15,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	_userHandler "project3/delivery/handler/users"
+	_routes "project3/delivery/routes"
 	_userRepository "project3/repository/user"
 	_userUseCase "project3/usecase/user"
 
@@ -47,4 +48,3 @@ func main() {
 
 	log.Fatal(e.Start(fmt.Sprintf(":%v", config.Port)))
 }
-
