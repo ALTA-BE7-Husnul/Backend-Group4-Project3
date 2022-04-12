@@ -30,11 +30,11 @@ func (uh *UserHandler) CreateUserHandler() echo.HandlerFunc {
 
 		errBind := c.Bind(&param)
 		if errBind != nil {
-			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed(errBind.Error()))
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("error inding data"))
 		}
 		_, err := uh.userUseCase.CreateUser(param)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed(err.Error()))
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("error create user"))
 		}
 		return c.JSON(http.StatusOK, helper.ResponseSuccessWithoutData("success create user"))
 	}
