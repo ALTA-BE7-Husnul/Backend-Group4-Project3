@@ -1,14 +1,14 @@
 package routes
 
 import (
+	_authHandler "project3/delivery/handler/auth"
 	_userHandler "project3/delivery/handler/users"
 	_middlewares "project3/delivery/middlewares"
-	"project3/delivery/handler/auth"
 
 	"github.com/labstack/echo/v4"
 )
 
-func RegisterAuthPath(e *echo.Echo, ah *auth.AuthHandler) {
+func RegisterAuthPath(e *echo.Echo, ah *_authHandler.AuthHandler) {
 	e.POST("/auth", ah.LoginHandler())
 }
 
