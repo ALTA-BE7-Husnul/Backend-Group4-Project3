@@ -6,6 +6,13 @@ import (
 	"net/http"
 	"project3/configs"
 
+	_authHandler "project3/delivery/handler/auth"
+	_middleware "project3/delivery/middlewares"
+	_routes "project3/delivery/routes"
+	_authRepository "project3/repository/auth"
+	_authUseCase "project3/usecase/auth"
+	"project3/utils"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
@@ -32,7 +39,7 @@ func main() {
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
 	}))
-
+	e.Use(_middleware.CustomLogger())
 	
 	_routes.RegisterUserPath(e, userHandler)
 
