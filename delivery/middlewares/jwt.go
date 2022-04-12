@@ -24,7 +24,7 @@ func CreateToken(id int, name string) (string, error) {
 	claims["authorized"] = true
 	claims["id"] = id
 	claims["name"] = name
-	claims["exp"] = time.Now().Add(time.Hour * 24).Unix() //Token expires after 1 hour
+	claims["exp"] = time.Now().Add(time.Hour * 200).Unix() //Token expires after 200 hour
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(secretjwt))
 }
