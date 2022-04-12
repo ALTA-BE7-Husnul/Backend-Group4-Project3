@@ -2,6 +2,7 @@ package routes
 
 import (
 	_authHandler "project3/delivery/handler/auth"
+	_commentHandler "project3/delivery/handler/comment"
 	_userHandler "project3/delivery/handler/users"
 	_middlewares "project3/delivery/middlewares"
 
@@ -17,4 +18,9 @@ func RegisterUserPath(e *echo.Echo, uh _userHandler.UserHandler) {
 	e.POST("/users", uh.CreateUserHandler())
 	e.PUT("/users/:id", uh.UpdateUserHandler(), _middlewares.JWTMiddleware())
 	e.DELETE("/users/:id", uh.DeleteUserHandler(), _middlewares.JWTMiddleware())
+}
+
+func RegisterCommentPath(e *echo.Echo, uh _commentHandler.CommentHandler) {
+	e.GET("/event/comments", uh.GetAllHandler())
+	e.POST("/event/comments", uh.CreateCommentHandler(), _middlewares.JWTMiddleware())
 }
