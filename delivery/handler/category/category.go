@@ -30,7 +30,6 @@ func (uh *CategoryHandler) GetAllCategoryHandler() echo.HandlerFunc {
 			response := map[string]interface{}{
 				"id":            catagory[i].ID,
 				"catagory_name": catagory[i].CategoryName,
-				"product":       catagory[i].Event,
 			}
 			responseCategories = append(responseCategories, response)
 		}
