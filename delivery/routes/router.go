@@ -29,7 +29,7 @@ func RegisterCommentPath(e *echo.Echo, uh _commentHandler.CommentHandler) {
 
 func RegisterEventPath(e *echo.Echo, eh *_eventHandler.EventHandler) {
 	e.POST("/event", eh.CreateEventHandler(), _middlewares.JWTMiddleware())
-
+}
 func RegisterCategoryPath(e *echo.Echo, uh _categoryHandler.CategoryHandler) {
 	e.GET("/category", uh.GetAllCategoryHandler(), _middlewares.JWTMiddleware())
 }
