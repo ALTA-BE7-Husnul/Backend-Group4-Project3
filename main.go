@@ -23,6 +23,10 @@ import (
 	_commentRepository "project3/repository/comment"
 	_commentUseCase "project3/usecase/comment"
 
+	_categoryHandler "project3/delivery/handler/category"
+	_categoryRepository "project3/repository/category"
+	_categoryUseCase "project3/usecase/category"
+
 	_utils "project3/utils"
 )
 
@@ -42,18 +46,24 @@ func main() {
 	commentUseCase := _commentUseCase.NewCommentUseCase(commentRepo)
 	commentHandler := _commentHandler.NewCommentHandler(commentUseCase)
 
+	categoryRepo := _categoryRepository.NewCategoryRepository(db)
+	categoryUseCase := _categoryUseCase.NewCategoryUseCase(categoryRepo)
+	categoryHandler := _categoryHandler.NewCategoryHandler(categoryUseCase)
+
 	e := echo.New()
 	e.Use(middleware.CORS())
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
+
 	}))
 	e.Use(_middleware.CustomLogger())
 
 	_routes.RegisterUserPath(e, userHandler)
 	_routes.RegisterAuthPath(e, authHandler)
 	_routes.RegisterCommentPath(e, commentHandler)
+	_routes.RegisterCategoryPath(e, categoryHandler)
 
 	log.Fatal(e.Start(fmt.Sprintf(":%v", config.Port)))
 }
