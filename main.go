@@ -7,9 +7,12 @@ import (
 	"project3/configs"
 
 	_authHandler "project3/delivery/handler/auth"
+	_eventHandler "project3/delivery/handler/event"
 	_middleware "project3/delivery/middlewares"
 	_authRepository "project3/repository/auth"
+	_eventRepository "project3/repository/event"
 	_authUseCase "project3/usecase/auth"
+	_eventUseCase "project3/usecase/event"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -46,6 +49,9 @@ func main() {
 	commentUseCase := _commentUseCase.NewCommentUseCase(commentRepo)
 	commentHandler := _commentHandler.NewCommentHandler(commentUseCase)
 
+	eventRepo := _eventRepository.NewEventRepository(db)
+	eventUseCase := _eventUseCase.NewEventUseCase(eventRepo)
+	eventHandler := _eventHandler.NewEventHandler(eventUseCase)
 	categoryRepo := _categoryRepository.NewCategoryRepository(db)
 	categoryUseCase := _categoryUseCase.NewCategoryUseCase(categoryRepo)
 	categoryHandler := _categoryHandler.NewCategoryHandler(categoryUseCase)
@@ -63,6 +69,7 @@ func main() {
 	_routes.RegisterUserPath(e, userHandler)
 	_routes.RegisterAuthPath(e, authHandler)
 	_routes.RegisterCommentPath(e, commentHandler)
+	_routes.RegisterEventPath(e, eventHandler)
 	_routes.RegisterCategoryPath(e, categoryHandler)
 
 	log.Fatal(e.Start(fmt.Sprintf(":%v", config.Port)))

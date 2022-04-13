@@ -31,10 +31,10 @@ func (uh *CommentHandler) GetAllHandler() echo.HandlerFunc {
 		responseComment := []map[string]interface{}{}
 		for i := 0; i < len(comments); i++ {
 			response := map[string]interface{}{
-				"id":            comments[i].ID,
-				"user_id":       comments[i].UserID,
-				"catagory_id":   comments[i].EventID,
-				"comment":       comments[i].Comment,
+				"id":          comments[i].ID,
+				"user_id":     comments[i].UserID,
+				"catagory_id": comments[i].EventID,
+				"comment":     comments[i].Comment,
 			}
 			responseComment = append(responseComment, response)
 		}
