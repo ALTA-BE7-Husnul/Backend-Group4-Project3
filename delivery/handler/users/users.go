@@ -69,9 +69,9 @@ func (uh *UserHandler) UpdateUserHandler() echo.HandlerFunc {
 		}
 
 		responseUser := map[string]interface{}{
-			"id":           users.ID,
-			"name":         users.Name,
-			"email":        users.Email,
+			"id":    users.ID,
+			"name":  users.Name,
+			"email": users.Email,
 		}
 
 		return c.JSON(http.StatusOK, helper.ResponseSuccess("success update data", responseUser))
@@ -119,9 +119,9 @@ func (uh *UserHandler) GetUserByIdHandler() echo.HandlerFunc {
 		}
 
 		responseUser := map[string]interface{}{
-			"id":           user.ID,
-			"name":         user.Name,
-			"email":        user.Email,
+			"id":    user.ID,
+			"name":  user.Name,
+			"email": user.Email,
 		}
 
 		return c.JSON(http.StatusOK, helper.ResponseSuccess("success get user by id", responseUser))

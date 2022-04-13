@@ -1,8 +1,13 @@
 package entities
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Event struct {
+	gorm.Model
 	UserID   uint      `json:"user_id" form:"user_id"`
 	Category string    `json:"category" form:"category"`
 	Name     string    `json:"name" form:"name"`
