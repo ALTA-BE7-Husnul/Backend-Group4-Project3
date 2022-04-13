@@ -1,8 +1,7 @@
 package entities
 
-import "gorm.io/gorm"
-
 type Category struct {
-	gorm.Model
-	Category string `json:"category" form:"category"`
+	ID           uint    `gorm:"primarykey"`
+	CategoryName string  `gorm:"not null" json:"category_name" form:"category_name"`
+	Event        []Event `gorm:"foreignKey:CategoryID;references:ID"`
 }

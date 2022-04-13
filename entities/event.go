@@ -4,7 +4,7 @@ import "time"
 
 type Event struct {
 	UserID   uint      `json:"user_id" form:"user_id"`
-	Category string    `json:"category" form:"category"`
+	CategoryID string  `json:"category_id" form:"category_id"`
 	Name     string    `json:"name" form:"name"`
 	Host     string    `json:"host" form:"host"`
 	Date     time.Time `json:"date" form:"date"`

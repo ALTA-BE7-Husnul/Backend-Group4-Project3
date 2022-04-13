@@ -29,9 +29,6 @@ func (uuc *CommentUseCase) CreateComment(request _entities.Comment) (_entities.C
 	if request.Comment == "" {
 		return comment, errors.New("can't be empty")
 	}
-	if request.UserID == 0 {
-		return comment, errors.New("can't be empty")
-	}
 	
 	return comment, err
 }
