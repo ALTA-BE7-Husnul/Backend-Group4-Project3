@@ -27,3 +27,13 @@ func (uuc *AttendeesUseCase) CreateAttendees(request _entities.Attendees) (_enti
 	
 	return attendees, rows, err
 }
+
+func (uuc *AttendeesUseCase) GetAttendees(request _entities.Attendees) ([]_entities.Attendees, error) {
+	attendeess, err := uuc.attendeesRepository.GetAttendees(request)
+	return attendeess, err
+}
+
+func (uuc *AttendeesUseCase) DeleteAttendees(idToken uint, idEvent uint) (uint, error) {
+	rows, err := uuc.attendeesRepository.DeleteAttendees(idToken, idEvent)
+	return rows, err
+}

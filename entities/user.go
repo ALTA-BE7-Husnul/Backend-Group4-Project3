@@ -8,4 +8,6 @@ type User struct {
 	Email    string `gorm:"not null;unique" json:"email" form:"email"`
 	Password string `gorm:"not null" json:"password" form:"password"`
 	Comment  []Comment `gorm:"foreignKey:UserID;references:ID"`
+	Attendees []Attendees `gorm:"foreignKey:UserID;references:ID"`
+	Event     []Event     `gorm:"foreignKey:UserID;references:ID"`
 }

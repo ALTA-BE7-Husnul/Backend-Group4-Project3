@@ -1,6 +1,7 @@
 package attendees
 
 import (
+	"errors"
 	_entities "project3/entities"
 
 	"fmt"
@@ -52,4 +53,33 @@ func (ur *AttendeesRepository) CreateAttendees(request _entities.Attendees) (_en
 		return request, 5, yx.Error
 	}
 	return request, 0, nil
+}
+
+func (ur *AttendeesRepository) GetAttendees(request _entities.Attendees) ([]_entities.Attendees, error) {
+	var attendees []_entities.Attendees
+	tx := ur.DB.Preload("User").Where("event_id = ?", request.EventID).Find(&attendees)
+
+	if tx.RowsAffected == 0 {
+		return nil, errors.New("not found")
+	}
+
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return attendees, nil
+}
+
+func (ur *AttendeesRepository) DeleteAttendees(idToken uint, idEvent uint) (uint, error) {
+	var attendees _entities.Attendees
+	tx := ur.DB.Where("event_id = ?", idEvent).Where("user_id = ?", idToken).Unscoped().Delete(&attendees)
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return 0, tx.Error
+	}
+
+	ur.DB.Exec("UPDATE events SET participants = ? WHERE id = ?", gorm.Expr("participants - ?", 1), idEvent)
+
+	return uint(tx.RowsAffected), nil
 }
