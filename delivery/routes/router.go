@@ -39,4 +39,6 @@ func RegisterCategoryPath(e *echo.Echo, uh _categoryHandler.CategoryHandler) {
 
 func RegisterJoinPath(e *echo.Echo, uh _attendeesHandler.AttendeesHandler) {
 	e.POST("/event/participations", uh.CreateAttendeesHandler(), _middlewares.JWTMiddleware())
+	e.GET("/event/participations", uh.GetAttendeesHandler(), _middlewares.JWTMiddleware())
+	e.DELETE("/event/participations/:id", uh.DeleteAttendeesHandler(), _middlewares.JWTMiddleware())
 }
