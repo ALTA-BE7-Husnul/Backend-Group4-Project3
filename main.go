@@ -30,6 +30,10 @@ import (
 	_categoryRepository "project3/repository/category"
 	_categoryUseCase "project3/usecase/category"
 
+	_attendeesHandler "project3/delivery/handler/attendees"
+	_attendeesRepository "project3/repository/attendees"
+	_attendeesUseCase "project3/usecase/attendees"
+
 	_utils "project3/utils"
 )
 
@@ -52,9 +56,14 @@ func main() {
 	eventRepo := _eventRepository.NewEventRepository(db)
 	eventUseCase := _eventUseCase.NewEventUseCase(eventRepo)
 	eventHandler := _eventHandler.NewEventHandler(eventUseCase)
+
 	categoryRepo := _categoryRepository.NewCategoryRepository(db)
 	categoryUseCase := _categoryUseCase.NewCategoryUseCase(categoryRepo)
 	categoryHandler := _categoryHandler.NewCategoryHandler(categoryUseCase)
+
+	attendeesRepo := _attendeesRepository.NewAttendeesRepository(db)
+	attendeesUseCase := _attendeesUseCase.NewAttendeesUseCase(attendeesRepo)
+	attendeesHandler := _attendeesHandler.NewAttendeesHandler(attendeesUseCase)
 
 	e := echo.New()
 	e.Use(middleware.CORS())
@@ -71,6 +80,7 @@ func main() {
 	_routes.RegisterCommentPath(e, commentHandler)
 	_routes.RegisterEventPath(e, eventHandler)
 	_routes.RegisterCategoryPath(e, categoryHandler)
+	_routes.RegisterJoinPath(e, attendeesHandler)
 
 	log.Fatal(e.Start(fmt.Sprintf(":%v", config.Port)))
 }

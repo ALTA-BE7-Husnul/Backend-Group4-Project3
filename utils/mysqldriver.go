@@ -36,4 +36,5 @@ func InitialMigration(db *gorm.DB) {
 	db.AutoMigrate(&entities.Comment{})
 	db.AutoMigrate(&entities.Event{})
 	db.AutoMigrate(&entities.Category{})
+	db.AutoMigrate(&entities.Attendees{})
 }
