@@ -69,7 +69,10 @@ func (eh *EventHandler) CreateEventHandler() echo.HandlerFunc {
 
 func (eh *EventHandler) GetEventsHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var events []_entities.Event
+		events, err := eh.eventUseCase.GetEvents()
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("failed to get events"))
+		}
 		return c.JSON(http.StatusOK, helper.ResponseSuccess("success to get events", events))
 	}
 }
