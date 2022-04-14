@@ -16,14 +16,14 @@ func NewAttendeesUseCase(attendeesRepo _attendeesRepository.AttendeesRepositoryI
 	}
 }
 
-func (uuc *AttendeesUseCase) CreateAttendees(request _entities.Attendees) (_entities.Attendees, error) {
-	attendees, err := uuc.attendeesRepository.CreateAttendees(request)
+func (uuc *AttendeesUseCase) CreateAttendees(request _entities.Attendees) (_entities.Attendees, int, error) {
+	attendees, rows, err := uuc.attendeesRepository.CreateAttendees(request)
 	if request.EventID == 0 {
-		return attendees, errors.New("can't be empty")
+		return attendees, 1, errors.New("can't be empty")
 	}
 	if request.UserID == 0 {
-		return attendees, errors.New("can't be empty")
+		return attendees, 1, errors.New("can't be empty")
 	}
 	
-	return attendees, err
+	return attendees, rows, err
 }

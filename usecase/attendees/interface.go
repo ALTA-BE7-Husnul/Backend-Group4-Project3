@@ -5,5 +5,5 @@ import (
 )
 
 type AttendeesUseCaseInterface interface {
-	CreateAttendees(request _entities.Attendees) (_entities.Attendees, error)
+	CreateAttendees(request _entities.Attendees) (_entities.Attendees, int, error)
 }

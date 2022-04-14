@@ -16,8 +16,8 @@ type Event struct {
 	Location string    `json:"location" form:"location"`
 	Details  string    `json:"details" form:"details"`
 	Quota    int       `json:"quota" form:"quota"`
+	Participants uint  `gorm:"not null" json:"participants" form:"participants"`
 	Image    string    `json:"image" form:"image"`
-	Comment []Comment  `json:"comment" form:"comment"`
-	Attendees []Attendees  `json:"attendees" form:"attendees"`
-	Attend []Attendees `gorm:"foreignKey:EventID;references:ID"`
+	Comment []Comment  ` gorm:"foreignKey:EventID;references:ID" json:"comment" form:"comment"`
+	Attendees []Attendees  `gorm:"foreignKey:EventID;references:ID" json:"attendees" form:"attendees"`
 }
