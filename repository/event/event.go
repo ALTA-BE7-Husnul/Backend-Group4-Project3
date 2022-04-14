@@ -31,6 +31,9 @@ func (er *EventRepository) CreateEvent(user_ID int, events _entities.Event, imag
 
 func (er *EventRepository) GetEvents() ([]_entities.Event, error) {
 	var events []_entities.Event
-
+	tx := er.DB.Find(&events)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
 	return events, nil
 }
