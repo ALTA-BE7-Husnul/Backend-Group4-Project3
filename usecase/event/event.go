@@ -24,3 +24,8 @@ func (euc *EventUseCase) GetEvents() ([]_entities.Event, error) {
 	events, err := euc.eventRepository.GetEvents()
 	return events, err
 }
+
+func (euc *EventUseCase) DeleteEvent(event_ID, user_ID int) (int, error) {
+	rows, err := euc.eventRepository.DeleteEvent(event_ID, user_ID)
+	return rows, err
+}

@@ -20,7 +20,9 @@ func InitDB(config *configs.AppConfig) *gorm.DB {
 		config.Database.Name,
 	)
 
-	db, err := gorm.Open(mysql.Open(connectionString), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(connectionString), &gorm.Config{
+		// DisableForeignKeyConstraintWhenMigrating: true,
+	})
 
 	if err != nil {
 		log.Info("failed to connect database :", err)
