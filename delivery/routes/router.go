@@ -30,6 +30,7 @@ func RegisterCommentPath(e *echo.Echo, uh _commentHandler.CommentHandler) {
 
 func RegisterEventPath(e *echo.Echo, eh *_eventHandler.EventHandler) {
 	e.POST("/event", eh.CreateEventHandler(), _middlewares.JWTMiddleware())
+	e.GET("/event", eh.GetEventsHandler())
 }
 
 func RegisterCategoryPath(e *echo.Echo, uh _categoryHandler.CategoryHandler) {
