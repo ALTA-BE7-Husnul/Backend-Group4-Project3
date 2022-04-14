@@ -38,7 +38,27 @@ func (uh *AttendeesHandler) CreateAttendeesHandler() echo.HandlerFunc {
 		}
 		param.UserID = uint(idToken)
 
-		_, err := uh.attendeesUseCase.CreateAttendees(param)
+		_, rows, err := uh.attendeesUseCase.CreateAttendees(param)
+
+		if rows == 1 {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("fail to read event"))
+		}
+
+		if rows == 2 {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("quota is full"))
+		}
+
+		if rows == 3 {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("you have joined"))
+		}
+
+		if rows == 4 {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("fail to read attendees"))
+		}
+		if rows == 6 {
+			return c.JSON(http.StatusBadRequest, helper.ResponseFailed("event not found"))
+		}
+
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed(err.Error()))
 		}
