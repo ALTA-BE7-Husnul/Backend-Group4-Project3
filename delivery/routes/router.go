@@ -32,6 +32,7 @@ func RegisterEventPath(e *echo.Echo, eh *_eventHandler.EventHandler) {
 	e.POST("/event", eh.CreateEventHandler(), _middlewares.JWTMiddleware())
 	e.GET("/event", eh.GetEventsHandler())
 	e.DELETE("/event/:id", eh.DeleteEventHandler(), _middlewares.JWTMiddleware())
+	e.PUT("/event/:id", eh.UpdateEventHandler(), _middlewares.JWTMiddleware())
 }
 
 func RegisterCategoryPath(e *echo.Echo, uh _categoryHandler.CategoryHandler) {
