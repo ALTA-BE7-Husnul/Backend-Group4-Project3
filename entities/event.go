@@ -15,8 +15,8 @@ type Event struct {
 	Date     time.Time `json:"date" form:"date"`
 	Location string    `json:"location" form:"location"`
 	Details  string    `json:"details" form:"details"`
-	Quota    int       `json:"quota" form:"quota"`
-	Participants uint  `gorm:"not null" json:"participants" form:"participants"`
+	Quota    uint       `json:"quota" form:"quota"`
+	Participants uint  `json:"participants" form:"participants"`
 	Image    string    `json:"image" form:"image"`
 	Comment []Comment  ` gorm:"foreignKey:EventID;references:ID" json:"comment" form:"comment"`
 	Attendees []Attendees  `gorm:"foreignKey:EventID;references:ID" json:"attendees" form:"attendees"`
