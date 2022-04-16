@@ -43,7 +43,7 @@ func (er *EventRepository) GetEvents() ([]_entities.Event, error) {
 
 func (er *EventRepository) GetEventById(event_ID int) (_entities.Event, error) {
 	var event _entities.Event
-	tx := er.DB.Where("id = ?", event_ID).Find(&event)
+	tx := er.DB.Preload("Attendees").Preload("Comment").Where("id = ?", event_ID).Find(&event)
 	if tx.Error != nil {
 		return _entities.Event{}, tx.Error
 	}

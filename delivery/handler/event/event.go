@@ -129,16 +129,7 @@ func (eh *EventHandler) GetEventByIdHandler() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("failed to get event"))
 		}
-		var eventResponse GetEventResponse
-		eventResponse.ID = event.ID
-		eventResponse.Name = event.Name
-		eventResponse.Host = event.Host
-		eventResponse.Details = event.Details
-		eventResponse.Date = event.Date
-		eventResponse.Location = event.Location
-		eventResponse.Quota = event.Quota
-		eventResponse.Image = event.Image
-		return c.JSON(http.StatusOK, helper.ResponseSuccess("success to get event", eventResponse))
+		return c.JSON(http.StatusOK, helper.ResponseSuccess("success to get event", event))
 	}
 }
 
