@@ -24,13 +24,17 @@ func (euc *EventUseCase) GetEvents() ([]_entities.Event, error) {
 	events, err := euc.eventRepository.GetEvents()
 	return events, err
 }
+func (euc *EventUseCase) GetEventById(event_ID int) (_entities.Event, error) {
+	event, err := euc.eventRepository.GetEventById(event_ID)
+	return event, err
+}
 
 func (euc *EventUseCase) DeleteEvent(event_ID, user_ID int) (int, error) {
 	rows, err := euc.eventRepository.DeleteEvent(event_ID, user_ID)
 	return rows, err
 }
 
-func (euc *EventUseCase) UpdateEvent(event _entities.Event, event_ID, idToken int, imageurl string) (_entities.Event, int, error) {
-	data, rows, err := euc.eventRepository.UpdateEvent(event, event_ID, idToken, imageurl)
+func (euc *EventUseCase) UpdateEvent(event _entities.Event, event_ID, idToken int) (_entities.Event, int, error) {
+	data, rows, err := euc.eventRepository.UpdateEvent(event, event_ID, idToken)
 	return data, rows, err
 }

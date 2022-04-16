@@ -1,6 +1,7 @@
 package event
 
 import (
+	"fmt"
 	"net/http"
 	"project3/delivery/handler/image"
 	"project3/delivery/helper"
@@ -8,6 +9,7 @@ import (
 	_entities "project3/entities"
 	_eventUseCase "project3/usecase/event"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -30,11 +32,34 @@ func (eh *EventHandler) CreateEventHandler() echo.HandlerFunc {
 			return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("unauthorized"))
 		}
 		// binding data
-		var event _entities.Event
-		errBind := c.Bind(&event)
+		var eventRequest EventRequest
+		errBind := c.Bind(&eventRequest)
 		if errBind != nil {
-			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("error binding data"))
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("error to bind data"))
 		}
+		// formatting time
+		layoutFormat := "2006-01-02T15:04:05Z0700"
+		dateFormat := fmt.Sprintf("%s:00+0700", eventRequest.Date)
+		dateParse, err_date_parse := time.Parse(layoutFormat, dateFormat)
+		if err_date_parse != nil {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("error to format time.Time"))
+		}
+
+		fmt.Println(eventRequest.Date) //debugging
+		fmt.Println(dateParse)         //debugging
+		//set eventRequest to event
+		var event _entities.Event
+		event.UserID = eventRequest.UserID
+		event.CategoryID = eventRequest.CategoryID
+		event.Name = eventRequest.Name
+		event.Host = eventRequest.Host
+		event.Date = dateParse
+		event.Location = eventRequest.Location
+		event.Details = eventRequest.Details
+		event.Quota = eventRequest.Quota
+		event.Participants = eventRequest.Participants
+		event.Image = eventRequest.Image
+
 		// binding image
 		fileData, fileInfo, err_binding_image := c.Request().FormFile("image")
 		if err_binding_image != nil {
@@ -79,7 +104,35 @@ func (eh *EventHandler) GetEventsHandler() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("failed to get events"))
 		}
-		return c.JSON(http.StatusOK, helper.ResponseSuccess("success to get events", events))
+		allEventResponse := []map[string]interface{}{}
+		for i := range events {
+			response := map[string]interface{}{
+				"id":       events[i].ID,
+				"name":     events[i].Name,
+				"host":     events[i].Host,
+				"date":     events[i].Date,
+				"location": events[i].Location,
+			}
+			allEventResponse = append(allEventResponse, response)
+		}
+		return c.JSON(http.StatusOK, helper.ResponseSuccess("success to get all events", allEventResponse))
+	}
+}
+
+func (eh *EventHandler) GetEventByIdHandler() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		event_ID, _ := strconv.Atoi(c.Param("id"))
+		event, err := eh.eventUseCase.GetEventById(event_ID)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("failed to get event"))
+		}
+		var eventResponse GetEventResponse
+		eventResponse.ID = event.ID
+		eventResponse.Name = event.Name
+		eventResponse.Host = event.Host
+		eventResponse.Date = event.Date
+		eventResponse.Location = event.Location
+		return c.JSON(http.StatusOK, helper.ResponseSuccess("success to get event", eventResponse))
 	}
 }
 
@@ -114,31 +167,8 @@ func (eh *EventHandler) UpdateEventHandler() echo.HandlerFunc {
 		if errBind != nil {
 			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("error binding data"))
 		}
-		// binding image
-		fileData, fileInfo, err_binding_image := c.Request().FormFile("image")
-		if err_binding_image != nil {
-			return c.JSON(http.StatusBadRequest, helper.ResponseFailed("error to bind image"))
-		}
-		// check file CheckFileExtension
-		_, err_check_extension := image.CheckFileExtension(fileInfo.Filename)
-		if err_check_extension != nil {
-			return c.JSON(http.StatusBadRequest, helper.ResponseFailed("error checking file extension"))
-		}
-		// check file size
-		err_check_size := image.CheckFileSize(fileInfo.Size)
-		if err_check_size != nil {
-			return c.JSON(http.StatusBadRequest, helper.ResponseFailed("error checking file size"))
-		}
-		fileName := "events_" + strconv.Itoa(idToken) + "_" + strconv.Itoa(id)
-		// upload the photo
-		var err_upload_photo error
-		theUrl, err_upload_photo := image.UploadImage("events", fileName, fileData)
-		if err_upload_photo != nil {
-			return c.JSON(http.StatusBadRequest, helper.ResponseFailed("error to upload file"))
-		}
 		// update event
-		imageURL := theUrl
-		_, rows, err_event := eh.eventUseCase.UpdateEvent(event, id, idToken, imageURL)
+		_, rows, err_event := eh.eventUseCase.UpdateEvent(event, id, idToken)
 		if err_event != nil {
 			return c.JSON(http.StatusBadRequest, helper.ResponseFailed("failed to update event"))
 		}
