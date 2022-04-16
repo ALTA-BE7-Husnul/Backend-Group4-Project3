@@ -37,7 +37,7 @@ func RegisterEventPath(e *echo.Echo, eh *_eventHandler.EventHandler) {
 }
 
 func RegisterCategoryPath(e *echo.Echo, uh _categoryHandler.CategoryHandler) {
-	e.GET("/category", uh.GetAllCategoryHandler(), _middlewares.JWTMiddleware())
+	e.GET("/category", uh.GetAllCategoryHandler())
 }
 
 func RegisterJoinPath(e *echo.Echo, uh _attendeesHandler.AttendeesHandler) {
