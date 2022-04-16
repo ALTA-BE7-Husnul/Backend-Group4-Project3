@@ -112,6 +112,9 @@ func (eh *EventHandler) GetEventsHandler() echo.HandlerFunc {
 				"host":     events[i].Host,
 				"date":     events[i].Date,
 				"location": events[i].Location,
+				"image":    events[i].Image,
+				"details":  events[i].Details,
+				"quota":    events[i].Quota,
 			}
 			allEventResponse = append(allEventResponse, response)
 		}
@@ -130,8 +133,11 @@ func (eh *EventHandler) GetEventByIdHandler() echo.HandlerFunc {
 		eventResponse.ID = event.ID
 		eventResponse.Name = event.Name
 		eventResponse.Host = event.Host
+		eventResponse.Details = event.Details
 		eventResponse.Date = event.Date
 		eventResponse.Location = event.Location
+		eventResponse.Quota = event.Quota
+		eventResponse.Image = event.Image
 		return c.JSON(http.StatusOK, helper.ResponseSuccess("success to get event", eventResponse))
 	}
 }
