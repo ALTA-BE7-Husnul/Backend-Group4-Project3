@@ -8,7 +8,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-
 func TestGetAttendees(t *testing.T) {
 	t.Run("TestGetAllSuccess", func(t *testing.T) {
 		attendeesUseCase := NewAttendeesUseCase(mockAttendeesRepository{})
@@ -44,14 +43,13 @@ func TestCreateAttendees(t *testing.T) {
 	})
 }
 
-
 func TestDeleteAttendees(t *testing.T) {
 	t.Run("TestDeleteUserSuccess", func(t *testing.T) {
 		attendeesUseCase := NewAttendeesUseCase(mockAttendeesRepository{})
 		rows, err := attendeesUseCase.DeleteAttendees(1, 1)
 		assert.Nil(t, nil, err)
 		assert.Equal(t, uint(1), rows)
-		
+
 	})
 
 	t.Run("TestDeleteUserError", func(t *testing.T) {
@@ -60,7 +58,23 @@ func TestDeleteAttendees(t *testing.T) {
 		assert.NotNil(t, err)
 		assert.Nil(t, nil, err)
 		assert.Equal(t, uint(1), rows)
-		
+
+	})
+}
+
+func TestGetEventsByUserId(t *testing.T) {
+	t.Run("TestGetAllSuccess", func(t *testing.T) {
+		attendeesUseCase := NewAttendeesUseCase(mockAttendeesRepository{})
+		data, err := attendeesUseCase.GetEventsByUserId(1)
+		assert.Nil(t, err)
+		assert.Equal(t, uint(1), data[0].EventID)
+	})
+
+	t.Run("TestGetAllError", func(t *testing.T) {
+		attendeesUseCase := NewAttendeesUseCase(mockAttendeesRepositoryError{})
+		data, err := attendeesUseCase.GetEventsByUserId(1)
+		assert.NotNil(t, err)
+		assert.Nil(t, data)
 	})
 }
 
@@ -83,6 +97,12 @@ func (m mockAttendeesRepository) DeleteAttendees(idToken uint, idEvent uint) (ui
 	return 1, nil
 }
 
+func (m mockAttendeesRepository) GetEventsByUserId(user_ID int) ([]_entities.Attendees, error) {
+	return []_entities.Attendees{
+		{EventID: 1, UserID: 1},
+	}, nil
+}
+
 // === mock error ===
 
 type mockAttendeesRepositoryError struct{}
@@ -97,4 +117,8 @@ func (m mockAttendeesRepositoryError) CreateAttendees(request _entities.Attendee
 
 func (m mockAttendeesRepositoryError) DeleteAttendees(idToken uint, idEvent uint) (uint, error) {
 	return 1, fmt.Errorf("error update data user")
+}
+
+func (m mockAttendeesRepositoryError) GetEventsByUserId(user_ID int) ([]_entities.Attendees, error) {
+	return nil, fmt.Errorf("error get data user")
 }
