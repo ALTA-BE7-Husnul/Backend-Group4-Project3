@@ -161,11 +161,25 @@ func (eh *EventHandler) UpdateEventHandler() echo.HandlerFunc {
 		}
 		id, _ := strconv.Atoi(c.Param("id"))
 		// binding data
-		var event _entities.Event
-		errBind := c.Bind(&event)
+		var updateEventRequest helper.UpdateEventRequest
+		errBind := c.Bind(&updateEventRequest)
 		if errBind != nil {
 			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("error binding data"))
 		}
+		// formatting time
+		layoutFormat := "2006-01-02T15:04:05Z0700"
+		dateFormat := fmt.Sprintf("%s:00+0700", updateEventRequest.Date)
+		dateParse, err_date_parse := time.Parse(layoutFormat, dateFormat)
+		if err_date_parse != nil {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("error to format time.Time"))
+		}
+		//set updateEventRequest to event
+		var event _entities.Event
+		event.Name = updateEventRequest.Name
+		event.Date = dateParse
+		event.Location = updateEventRequest.Location
+		event.Details = updateEventRequest.Details
+		event.Quota = updateEventRequest.Quota
 		// update event
 		_, rows, err_event := eh.eventUseCase.UpdateEvent(event, id, idToken)
 		if err_event != nil {

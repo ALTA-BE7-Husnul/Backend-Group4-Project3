@@ -2,6 +2,7 @@ package event
 
 import (
 	"errors"
+	"fmt"
 	_entities "project3/entities"
 
 	"gorm.io/gorm"
@@ -64,23 +65,42 @@ func (er *EventRepository) DeleteEvent(event_ID, user_ID int) (int, error) {
 }
 
 func (er *EventRepository) UpdateEvent(event _entities.Event, event_ID, idToken int) (_entities.Event, int, error) {
-	if event.Location != "" {
-		tx := er.DB.Model(&_entities.Event{}).Where("id = ?", event_ID).Where("user_id = ?", idToken).Update("location", event.Location)
-		if tx.Error != nil {
-			return event, 1, tx.Error
-		}
-		if tx.RowsAffected == 0 {
-			return event, 2, tx.Error
-		}
+	txName := er.DB.Model(&_entities.Event{}).Where("id = ?", event_ID).Where("user_id = ?", idToken).Update("name", event.Name)
+	if txName.Error != nil {
+		return event, 1, txName.Error
 	}
-	if event.Quota > 0 {
-		tx := er.DB.Model(&_entities.Event{}).Where("id = ?", event_ID).Where("user_id = ?", idToken).Update("quota", event.Quota)
-		if tx.Error != nil {
-			return event, 1, tx.Error
-		}
-		if tx.RowsAffected == 0 {
-			return event, 2, tx.Error
-		}
+	if txName.RowsAffected == 0 {
+		return event, 2, txName.Error
+	}
+	fmt.Printf("rows name : %d\n", txName.RowsAffected)
+	txDate := er.DB.Model(&_entities.Event{}).Where("id = ?", event_ID).Where("user_id = ?", idToken).Update("date", event.Date)
+	if txDate.Error != nil {
+		return event, 1, txDate.Error
+	}
+	if txDate.RowsAffected == 0 {
+		return event, 2, txDate.Error
+	}
+	fmt.Printf("rows date : %d\n", txDate.RowsAffected)
+	txLocation := er.DB.Model(&_entities.Event{}).Where("id = ?", event_ID).Where("user_id = ?", idToken).Update("location", event.Location)
+	if txLocation.Error != nil {
+		return event, 1, txLocation.Error
+	}
+	if txLocation.RowsAffected == 0 {
+		return event, 2, txLocation.Error
+	}
+	txDetails := er.DB.Model(&_entities.Event{}).Where("id = ?", event_ID).Where("user_id = ?", idToken).Update("details", event.Details)
+	if txDetails.Error != nil {
+		return event, 1, txDetails.Error
+	}
+	if txDetails.RowsAffected == 0 {
+		return event, 2, txDetails.Error
+	}
+	txQuota := er.DB.Model(&_entities.Event{}).Where("id = ?", event_ID).Where("user_id = ?", idToken).Update("quota", event.Quota)
+	if txQuota.Error != nil {
+		return event, 1, txQuota.Error
+	}
+	if txQuota.RowsAffected == 0 {
+		return event, 2, txQuota.Error
 	}
 	return event, 0, nil
 }
