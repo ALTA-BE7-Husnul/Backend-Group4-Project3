@@ -135,6 +135,21 @@ func (eh *EventHandler) GetEventByIdHandler() echo.HandlerFunc {
 	}
 }
 
+func (eh *EventHandler) GetEventByUserIdHandler() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		idToken, errToken := _middlewares.ExtractToken(c)
+		if errToken != nil {
+			return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("unauthorized"))
+		}
+		fmt.Println(idToken)
+		events, err := eh.eventUseCase.GetEventByUserId(idToken)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("failed to get user's event"))
+		}
+		return c.JSON(http.StatusOK, helper.ResponseSuccess("success to get user's event", events))
+	}
+}
+
 func (eh *EventHandler) DeleteEventHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		idToken, errToken := _middlewares.ExtractToken(c)
