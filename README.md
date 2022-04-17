@@ -28,6 +28,7 @@ User can also commenting the event.
 * `/event/:id` with method `DELETE` to delete event
 * `/event/participations` with method `POST` to join the event
 * `/event/participations` with method `GET` to see event's attendees
+* `/event/participations/user` with method `GET` to see event by user id that logged in
 * `/event/participations/:id` with method `DELETE` to cancel join the event
 * `/category` with mehod `GET` to See all the event's category
 * `/events/comments` with method `POST` to create a comment
