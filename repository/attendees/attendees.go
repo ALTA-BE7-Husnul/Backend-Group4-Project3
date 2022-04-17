@@ -69,6 +69,18 @@ func (ur *AttendeesRepository) GetAttendees(request _entities.Attendees) ([]_ent
 	return attendees, nil
 }
 
+func (ur *AttendeesRepository) GetEventsByUserId(user_ID int) ([]_entities.Attendees, error) {
+	var attendees []_entities.Attendees
+	tx := ur.DB.Preload("Event").Where("user_id = ?", user_ID).Find(&attendees)
+	if tx.RowsAffected == 0 {
+		return nil, errors.New("not found")
+	}
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return attendees, nil
+}
+
 func (ur *AttendeesRepository) DeleteAttendees(idToken uint, idEvent uint) (uint, error) {
 	var attendees _entities.Attendees
 	tx := ur.DB.Where("event_id = ?", idEvent).Where("user_id = ?", idToken).Unscoped().Delete(&attendees)
