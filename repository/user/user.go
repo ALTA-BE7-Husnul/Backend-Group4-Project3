@@ -25,7 +25,6 @@ func (ur *UserRepository) CreateUser(request _entities.User) (_entities.User, er
 	return request, nil
 }
 
-
 func (ur *UserRepository) GetUserById(idToken int) (_entities.User, int, error) {
 	var users _entities.User
 	tx := ur.DB.Where("ID = ?", idToken).Find(&users)
@@ -48,7 +47,7 @@ func (ur *UserRepository) UpdateUser(request _entities.User) (_entities.User, in
 
 func (ur *UserRepository) DeleteUser(id int) error {
 
-	err := ur.DB.Unscoped().Delete(&_entities.User{}, id).Error
+	err := ur.DB.Delete(&_entities.User{}, id).Error
 	if err != nil {
 		return err
 	}
