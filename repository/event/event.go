@@ -51,6 +51,15 @@ func (er *EventRepository) GetEventById(event_ID int) (_entities.Event, error) {
 	return event, nil
 }
 
+func (er *EventRepository) GetEventByUserId(idToken int) ([]_entities.Event, error) {
+	var events []_entities.Event
+	tx := er.DB.Preload("Attendees").Preload("Comment").Where("user_id = ?", idToken).Find(&events)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return events, nil
+}
+
 func (er *EventRepository) DeleteEvent(event_ID, user_ID int) (int, error) {
 	var events []_entities.Event
 	tx := er.DB.Where("id = ?", event_ID).Where("user_id = ?", user_ID).Delete(&events)
