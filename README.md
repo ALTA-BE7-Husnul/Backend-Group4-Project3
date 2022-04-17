@@ -22,13 +22,14 @@ User can also commenting the event.
 * `/users/:id` with method `PUT` to edit user details
 * `/users/:id` with method `DELETE` to delete account
 * `/event` with method `GET` to See all the events
+* `/event/user` with method `GET` to See all the events created by user id that logged in
 * `/event` with method `POST` to create event
 * `/event/:id` with method `GET` to see one event by inputing id
 * `/event/:id` with method `PUT` to edit one event details by id
 * `/event/:id` with method `DELETE` to delete event
 * `/event/participations` with method `POST` to join the event
 * `/event/participations` with method `GET` to see event's attendees
-* `/event/participations/user` with method `GET` to see event by user id that logged in
+* `/event/participations/user` with method `GET` to see event that attended by user id that logged in
 * `/event/participations/:id` with method `DELETE` to cancel join the event
 * `/category` with mehod `GET` to See all the event's category
 * `/events/comments` with method `POST` to create a comment
