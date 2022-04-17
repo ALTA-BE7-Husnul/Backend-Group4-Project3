@@ -107,14 +107,16 @@ func (eh *EventHandler) GetEventsHandler() echo.HandlerFunc {
 		allEventResponse := []map[string]interface{}{}
 		for i := range events {
 			response := map[string]interface{}{
-				"id":       events[i].ID,
-				"name":     events[i].Name,
-				"host":     events[i].Host,
-				"date":     events[i].Date,
-				"location": events[i].Location,
-				"image":    events[i].Image,
-				"details":  events[i].Details,
-				"quota":    events[i].Quota,
+				"id":          events[i].ID,
+				"user_id":     events[i].UserID,
+				"category_id": events[i].CategoryID,
+				"name":        events[i].Name,
+				"host":        events[i].Host,
+				"date":        events[i].Date,
+				"location":    events[i].Location,
+				"image":       events[i].Image,
+				"details":     events[i].Details,
+				"quota":       events[i].Quota,
 			}
 			allEventResponse = append(allEventResponse, response)
 		}
