@@ -82,7 +82,7 @@ func (uh *AttendeesHandler) GetAttendeesHandler() echo.HandlerFunc {
 
 		param.UserID = uint(idToken)
 
-		attendees, err := uh.attendeesUseCase.GetAttendees(param) 
+		attendees, err := uh.attendeesUseCase.GetAttendees(param)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed(err.Error()))
 		}
@@ -94,7 +94,7 @@ func (uh *AttendeesHandler) GetAttendeesHandler() echo.HandlerFunc {
 				"event_id": attendees[i].EventID,
 				"user_id":  attendees[i].UserID,
 				"user": map[string]interface{}{
-					"name": attendees[i].User.Name,
+					"name":  attendees[i].User.Name,
 					"email": attendees[i].User.Email},
 			}
 			responseAttendees = append(responseAttendees, response)
@@ -126,5 +126,34 @@ func (ah *AttendeesHandler) DeleteAttendeesHandler() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, helper.ResponseFailed("data not found"))
 		}
 		return c.JSON(http.StatusOK, helper.ResponseSuccessWithoutData("successfully cancel join event"))
+	}
+}
+
+func (ah *AttendeesHandler) GetEventsByUserIdHandler() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		idToken, errToken := _middlewares.ExtractToken(c)
+		if errToken != nil {
+			return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("unauthorized"))
+		}
+		user_ID := idToken
+		attendees, errGet := ah.attendeesUseCase.GetEventsByUserId(user_ID)
+		if errGet != nil {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed(errGet.Error()))
+		}
+		responseAttendees := []map[string]interface{}{}
+		for i := 0; i < len(attendees); i++ {
+			response := map[string]interface{}{
+				"user_id": idToken,
+				"events": map[string]interface{}{
+					"name":     attendees[i].Event.Name,
+					"date":     attendees[i].Event.Date,
+					"location": attendees[i].Event.Location,
+					"details":  attendees[i].Event.Details,
+				},
+			}
+			responseAttendees = append(responseAttendees, response)
+		}
+
+		return c.JSON(http.StatusOK, helper.ResponseSuccess("success to get event by user id", responseAttendees))
 	}
 }
