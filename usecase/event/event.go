@@ -38,3 +38,8 @@ func (euc *EventUseCase) UpdateEvent(event _entities.Event, event_ID, idToken in
 	data, rows, err := euc.eventRepository.UpdateEvent(event, event_ID, idToken)
 	return data, rows, err
 }
+
+func (euc *EventUseCase) GetEventByUserId(idToken int) ([]_entities.Event, error) {
+	events, err := euc.eventRepository.GetEventByUserId(idToken)
+	return events, err
+}

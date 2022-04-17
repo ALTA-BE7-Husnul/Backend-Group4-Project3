@@ -10,4 +10,5 @@ type EventUseCaseInterface interface {
 	GetEventById(event_ID int) (_entities.Event, error)
 	DeleteEvent(event_ID, user_ID int) (int, error)
 	UpdateEvent(event _entities.Event, event_ID, idToken int) (_entities.Event, int, error)
+	GetEventByUserId(idToken int) ([]_entities.Event, error)
 }
