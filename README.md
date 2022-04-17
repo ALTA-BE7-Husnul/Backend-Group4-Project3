@@ -1,5 +1,5 @@
 ## About The Project
-This is a Backend Project about Event Planning App using Golang programming language.
+This is a Backend Project about Event Planning App using Go programming language.
 There's a jwt token for login authentication. and if user already have an account, user can just login with email and password. if not, user should register first.
 
 What users can do is, User can edit or delete their details and create their own event.
